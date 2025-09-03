@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>KDP绘本PDF生成器</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>🎨 KDP绘本PDF生成器</h1>
+        </header>
+        
+        <main class="main-content">
+            <div class="step-indicator">
+                <div class="step active" data-step="1">项目初始化</div>
+                <div class="step" data-step="2">内容策划</div>
+                <div class="step" data-step="3">KDP配置</div>
+                <div class="step" data-step="4">预览生成</div>
+            </div>
+            
+            <div class="step-content">
+                <!-- 步骤1: 项目初始化 -->
+                <div class="step-panel active" id="step-1">
+                    <h2>项目初始化</h2>
+                    <div class="step-description">
+                        <p>欢迎使用KDP绘本PDF生成器！请按照以下步骤完成项目设置：</p>
+                        <ol class="step-list">
+                            <li>为您的绘本项目起一个名字</li>
+                            <li>选择包含图片的文件夹</li>
+                            <li>系统将自动分析图片比例并给出建议</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="form-group">
+                    <label for="project-name">项目名称</label>
+                    <input type="text" id="project-name" class="form-control" placeholder="例如：我的第一本绘本、动物世界、童话故事集">
+                    <div class="help-text">
+                        <span class="help-icon">💡</span>
+                        <span>给您的项目起一个有意义的名字，这将用作最终PDF文件的名称</span>
+                    </div>
+                    <div class="validation-message" id="project-name-validation" style="display: none;">
+                        <span class="validation-icon">⚠️</span>
+                        <span class="validation-text">项目名称不能为空</span>
+                    </div>
+                </div>
+                    
+                    <div class="form-group">
+                        <label>选择图片文件夹</label>
+                        <div class="folder-selector">
+                            <button id="select-folder-btn" class="btn btn-primary">
+                                📁 选择文件夹
+                            </button>
+                            <span id="selected-folder" class="selected-path">未选择文件夹</span>
+                        </div>
+                        <div class="help-text">
+                            <span class="help-icon">📂</span>
+                            <span>选择包含您要制作绘本的图片文件夹。支持 JPG、PNG、WebP、GIF 格式</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="ratio-confirmation" style="display: none;">
+                        <label>图片比例分析</label>
+                        <div class="aspect-ratio-info">
+                            <div class="ratio-item">
+                                <span class="ratio-label">检测到的图片比例：</span>
+                                <span id="detected-ratio" class="ratio-value">-</span>
+                            </div>
+                            <div class="ratio-item">
+                                <span class="ratio-label">建议的书籍比例：</span>
+                                <span id="suggested-ratio" class="ratio-value">-</span>
+                            </div>
+                            <div class="ratio-warning" id="ratio-warning" style="display: none;">
+                                <span class="warning-icon">⚠️</span>
+                                <span>图片比例与书籍比例不匹配，建议选择合适的书籍尺寸</span>
+                            </div>
+                        </div>
+                        <div class="help-text">
+                            <span class="help-icon">🔍</span>
+                            <span>系统会自动分析您的图片比例，并推荐最适合的书籍尺寸，确保最佳打印效果</span>
+                        </div>
+                    </div>
+
+                    <div class="step-progress-compact">
+                        <div class="progress-header">
+                            <span class="progress-title">项目设置进度</span>
+                            <div class="progress-status">
+                                <span class="progress-percentage" id="progress-percentage">0%</span>
+                                <span class="progress-text" id="progress-text">准备开始</span>
+                            </div>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                                <div class="progress-glow" id="progress-glow"></div>
+                            </div>
+                        </div>
+                        <div class="progress-steps">
+                            <div class="step-item" id="step-name-item">
+                                <span class="step-indicator" id="step-name-indicator">📝</span>
+                                <span class="step-label">项目名称</span>
+                            </div>
+                            <div class="step-item" id="step-folder-item">
+                                <span class="step-indicator" id="step-folder-indicator">📁</span>
+                                <span class="step-label">选择文件夹</span>
+                            </div>
+                            <div class="step-item" id="step-ratio-item">
+                                <span class="step-indicator" id="step-ratio-indicator">🔍</span>
+                                <span class="step-label">比例分析</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button id="next-step-1" class="btn btn-primary" disabled>
+                            下一步 →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 步骤2: 内容策划 -->
+                <div class="step-panel" id="step-2">
+                    <h2>内容策划与排序</h2>
+                    
+                    <div class="sorting-strategy">
+                        <h3>选择排序策略</h3>
+                        <div class="strategy-options">
+                            <label class="radio-option">
+                                <input type="radio" name="sorting" value="manual" checked>
+                                <span class="radio-custom"></span>
+                                手动选择与排序
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="sorting" value="filename">
+                                <span class="radio-custom"></span>
+                                按文件名排序
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="sorting" value="random">
+                                <span class="radio-custom"></span>
+                                随机选择
+                            </label>
+                        </div>
+                        
+                        <!-- 随机选择数量输入 -->
+                        <div class="random-selection" id="random-selection" style="display: none;">
+                            <div class="input-group">
+                                <label for="random-count">选择数量：</label>
+                                <input type="number" id="random-count" min="1" max="100" value="10" class="form-control">
+                                <button type="button" id="apply-random" class="btn btn-primary">应用随机选择</button>
+                                <button type="button" id="reshuffle-random" class="btn btn-secondary">重新随机</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="image-preview-section">
+                        <h3>图片预览与排序</h3>
+                        <div class="image-controls">
+                            <label class="checkbox-option">
+                                <input type="checkbox" id="select-all-images" checked>
+                                <span class="checkbox-custom"></span>
+                                全选所有图片
+                            </label>
+                            <button id="clear-selection" class="btn btn-secondary btn-sm">清除选择</button>
+                        </div>
+                        <div class="image-grid" id="image-grid">
+                            <!-- 图片缩略图将在这里动态生成 -->
+                        </div>
+                        <div class="image-info">
+                            <p>共找到 <span id="image-count">0</span> 张图片</p>
+                            <p>已选择 <span id="selected-count">0</span> 张图片</p>
+                            <p class="warning-text">⚠️ 注意：只有选中的图片会被包含在PDF中</p>
+                        </div>
+                    </div>
+
+                    <div class="step-actions">
+                        <button id="prev-step-2" class="btn btn-secondary">← 上一步</button>
+                        <button id="next-step-2" class="btn btn-primary">下一步 →</button>
+                    </div>
+                </div>
+
+                <!-- 步骤3: KDP配置 -->
+                <div class="step-panel" id="step-3">
+                    <h2>KDP规格配置</h2>
+                    
+                    <div class="kdp-settings">
+                        <div class="form-group">
+                            <label for="kdp-size">书籍尺寸</label>
+                            <select id="kdp-size" class="form-select">
+                                <option value="8.5x11">8.5" x 11" | 21.59 x 27.94 cm</option>
+                                <option value="8.5x8.5">8.5" x 8.5" | 21.59 x 21.59 cm</option>
+                                <option value="6x9">6" x 9" | 15.24 x 22.86 cm</option>
+                            </select>
+                            <small class="form-text">选择尺寸将影响PDF的页面比例和图片布局</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>印刷方式</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="printing" value="double-sided" checked>
+                                    <span class="radio-custom"></span>
+                                    双面印刷（图片连续排列，无空白页）
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="printing" value="single-sided">
+                                    <span class="radio-custom"></span>
+                                    单面印刷（每张图片后插入空白页）
+                                </label>
+                            </div>
+                            <small class="form-text">单面印刷适合某些特殊装订需求，双面印刷更节省纸张</small>
+                        </div>
+                    </div>
+
+                    <div class="step-actions">
+                        <button id="prev-step-3" class="btn btn-secondary">← 上一步</button>
+                        <button id="next-step-3" class="btn btn-primary">下一步 →</button>
+                    </div>
+                </div>
+
+                <!-- 步骤4: 预览生成 -->
+                <div class="step-panel" id="step-4">
+                    <h2>预览与生成</h2>
+                    
+                    <div class="preview-section">
+                        <h3>项目预览</h3>
+                        <div class="project-summary">
+                            <div class="summary-item">
+                                <span class="label">项目名称:</span>
+                                <span id="summary-project-name">-</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">选择的文件夹:</span>
+                                <span id="summary-selected-folder">-</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">图片数量:</span>
+                                <span id="summary-image-count">-</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">书籍尺寸:</span>
+                                <span id="summary-book-size">-</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">印刷方式:</span>
+                                <span id="summary-printing-mode">-</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">预计页数:</span>
+                                <span id="summary-page-count">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-actions">
+                        <button id="prev-step-4" class="btn btn-secondary">← 上一步</button>
+                        <button id="generate-pdf-btn" class="btn btn-success">🚀 生成PDF</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="renderer-simple.js"></script>
+</body>
+</html>
