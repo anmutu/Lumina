@@ -170,7 +170,7 @@ A: 关闭其他应用程序释放内存，使用SSD存储提升性能
 
 ## 🤝 贡献指南
 
-我们欢迎社区贡献！请查看 [CONTRIBUTING.md](CONTRIBUTING.md) 了解如何参与项目开发。
+我们欢迎社区贡献！请通过GitHub Issues或Discussions与我们联系。
 
 ### 开发环境设置
 1. Fork项目
@@ -180,7 +180,7 @@ A: 关闭其他应用程序释放内存，使用SSD存储提升性能
 
 ## 📄 许可证
 
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
+本项目采用 MIT 许可证。
 
 ## 🙏 致谢
 
